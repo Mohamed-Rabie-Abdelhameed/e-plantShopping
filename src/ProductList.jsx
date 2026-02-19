@@ -1,13 +1,13 @@
 import { useState } from "react";
 import "./ProductList.css";
 import CartItem from "./CartItem";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "./CartSlice";
 
 function ProductList({ onHomeClick }) {
   const [showCart, setShowCart] = useState(false);
-  const [addedToCart, setAddedToCart] = useState({});
   const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
 
   const plantsArray = [
     {
@@ -295,10 +295,6 @@ function ProductList({ onHomeClick }) {
 
   const handleAddToCart = (product) => {
     dispatch(addItem(product));
-    setAddedToCart((prevState) => ({
-      ...prevState,
-      [product.name]: true, // Update the addedToCart state
-    }));
   };
 
   return (
@@ -378,10 +374,13 @@ function ProductList({ onHomeClick }) {
                     </div>
                     <div className="product-cost">{plant.cost}</div>
                     <button
-                      className={`product-button ${addedToCart[plant.name] ? "added-to-cart" : ""}`}
+                      className={`product-button ${cartItems.some((item) => item.name === plant.name) ? "added-to-cart" : ""}`}
                       onClick={() => handleAddToCart(plant)}
+                      disabled={cartItems.some(
+                        (item) => item.name === plant.name,
+                      )}
                     >
-                      {addedToCart[plant.name]
+                      {cartItems.some((item) => item.name === plant.name)
                         ? "Added to Cart"
                         : "Add to Cart"}
                     </button>
