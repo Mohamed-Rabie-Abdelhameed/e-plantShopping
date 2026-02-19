@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { removeItem, updateQuantity } from "./CartSlice";
+import { addItem, removeItem, updateQuantity } from "./CartSlice";
 import "./CartItem.css";
 import PropTypes from "prop-types";
 
@@ -24,7 +24,7 @@ const CartItem = ({ onContinueShopping }) => {
   };
 
   const handleIncrement = (item) => {
-    dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
+    dispatch(addItem(item));
   };
 
   const handleDecrement = (item) => {
